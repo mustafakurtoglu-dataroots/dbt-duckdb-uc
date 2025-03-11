@@ -122,7 +122,7 @@ def pyarrow_type_to_supported_uc_json_type(data_type: pa.DataType) -> UCSupporte
     elif pa.types.is_date32(data_type):
         return "DATE"
     elif pa.types.is_timestamp(data_type):
-        return "TIMESTAMP_NTZ"
+        return "TIMESTAMP"
     elif pa.types.is_string(data_type):
         return "STRING"
     elif pa.types.is_binary(data_type):
@@ -209,6 +209,15 @@ def create_table_if_not_exists(
         pass
 
 
+def convert_pyarrow_ntz_to_tz(table, target_tz="UTC"):
+    """Convert all TIMESTAMP_NTZ columns in a PyArrow Table to TIMESTAMP with timezone."""
+    new_columns = [
+        col.cast(pa.timestamp(col.type.unit, tz=target_tz)) if pa.types.is_timestamp(col.type) and col.type.tz is None else col
+        for col in table.columns
+    ]
+    return pa.Table.from_arrays(new_columns, names=table.schema.names)
+
+
 class Plugin(BasePlugin):
     # The name of the catalog
     catalog_name: str = "unity"
@@ -262,7 +271,6 @@ class Plugin(BasePlugin):
         assert (
             target_config.relation.identifier is not None
         ), "Relation identifier is required to name the table!"
-
         # Get required variables from the target configuration
         table_path = target_config.location.path
         table_name = target_config.relation.identifier
@@ -281,9 +289,11 @@ class Plugin(BasePlugin):
 
         # Get the storage format from the plugin configuration
         storage_format = self.plugin_config.get("format", self.default_format)
+        
+        df_converted=convert_pyarrow_ntz_to_tz(df)
 
         # Convert the pa schema to columns
-        converted_schema = pyarrow_schema_to_columns(schema=df.schema)
+        converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
 
         # Create the table in the Unitycatalog if it does not exist
         create_table_if_not_exists(
@@ -310,7 +320,7 @@ class Plugin(BasePlugin):
             delta_write(
                 mode=mode,
                 table_path=table_path,
-                df=df,
+                df=df_converted,
                 storage_options=storage_options,
                 partition_key=partition_key,
                 unique_key=unique_key,
