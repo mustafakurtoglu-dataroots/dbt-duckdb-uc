@@ -122,7 +122,7 @@ def pyarrow_type_to_supported_uc_json_type(data_type: pa.DataType) -> UCSupporte
     elif pa.types.is_date32(data_type):
         return "DATE"
     elif pa.types.is_timestamp(data_type):
-        return "TIMESTAMP"
+        return "TIMESTAMP_NTZ"
     elif pa.types.is_string(data_type):
         return "STRING"
     elif pa.types.is_binary(data_type):
