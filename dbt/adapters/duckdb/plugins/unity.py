@@ -151,7 +151,6 @@ def pyarrow_schema_to_columns(schema: pa.Schema) -> list[Column]:
         data_type = field.type
         json_type = pyarrow_type_to_supported_uc_json_type(data_type)
 
-            
         column = Column(
             name=field.name,
             type_name=json_type,
