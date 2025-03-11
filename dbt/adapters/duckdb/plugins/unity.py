@@ -151,6 +151,11 @@ def pyarrow_schema_to_columns(schema: pa.Schema) -> list[Column]:
         data_type = field.type
         json_type = pyarrow_type_to_supported_uc_json_type(data_type)
 
+        
+        # Ensure all timestamp columns have timezone 'UTC'
+        if pa.types.is_timestamp(data_type):
+            data_type = pa.timestamp('ns', tz='UTC')
+            
         column = Column(
             name=field.name,
             type_name=json_type,
