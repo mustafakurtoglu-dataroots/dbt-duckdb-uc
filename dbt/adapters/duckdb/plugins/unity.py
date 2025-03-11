@@ -153,7 +153,7 @@ def pyarrow_schema_to_columns(schema: pa.Schema) -> list[Column]:
 
         
         # Ensure all timestamp columns have timezone 'UTC'
-        if pa.types.is_timestamp(data_type):
+        if pa.types.is_timestampntz(data_type):
             data_type = pa.timestamp('ns', tz='UTC')
             
         column = Column(
