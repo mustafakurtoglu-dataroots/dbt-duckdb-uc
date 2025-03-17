@@ -274,6 +274,7 @@ class Plugin(BasePlugin):
         # Get required variables from the target configuration
         table_path = target_config.location.path
         table_name = target_config.relation.identifier
+        table_path_uc = target_config.location_uc
 
         # Get optional variables from the target configuration
         mode = target_config.config.get("mode", "overwrite")
@@ -301,7 +302,7 @@ class Plugin(BasePlugin):
             table_name=table_name,
             schema_name=schema_name,
             catalog_name=self.catalog_name,
-            storage_location=table_path,
+            storage_location=table_path_uc,
             schema=converted_schema,
             storage_format=storage_format,
         )
