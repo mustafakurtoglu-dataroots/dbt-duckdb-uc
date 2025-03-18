@@ -277,9 +277,6 @@ class Plugin(BasePlugin):
         # Get required variables from the target configuration
         table_path = target_config.location.path
         table_name = target_config.relation.identifier
-        print("target_config.location:", target_config.location)
-        print("table_path", table_path)
-        print("table_name", table_name)
         # Get optional variables from the target configuration
         mode = target_config.config.get("mode", "overwrite")
         schema_name = target_config.config.get("schema")
