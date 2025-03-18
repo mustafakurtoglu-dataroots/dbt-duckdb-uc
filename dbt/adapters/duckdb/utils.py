@@ -88,7 +88,7 @@ class TargetConfig:
     column_list: Sequence[Column]
     config: Any  # TODO
     location: Optional[TargetLocation] = None
-    location_uc: Optional[TargetLocation]
+    location_uc: Optional[TargetLocation] = None
     
     def as_dict(self) -> Dict[str, Any]:
         base = {
