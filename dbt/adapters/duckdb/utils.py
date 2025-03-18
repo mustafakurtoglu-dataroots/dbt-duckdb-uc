@@ -88,7 +88,8 @@ class TargetConfig:
     column_list: Sequence[Column]
     config: Any  # TODO
     location: Optional[TargetLocation] = None
-
+    location_uc: Optional[TargetLocation] = None
+    
     def as_dict(self) -> Dict[str, Any]:
         base = {
             "relation": self.relation.to_dict(),
@@ -97,6 +98,8 @@ class TargetConfig:
         }
         if self.location:
             base["location"] = self.location.as_dict()
+        if self.location_uc:
+            base["location_uc"] = self.location_uc.as_dict()
         return base
 
 
