@@ -273,6 +273,7 @@ class Plugin(BasePlugin):
         ), "Relation identifier is required to name the table!"
         # Get required variables from the target configuration
         table_path = target_config.location.path
+        table_path_uc = target_config.location_uc.path
         table_name = target_config.relation.identifier
 
         # Get optional variables from the target configuration
@@ -301,7 +302,7 @@ class Plugin(BasePlugin):
             table_name=table_name,
             schema_name=schema_name,
             catalog_name=self.catalog_name,
-            storage_location=table_path,
+            storage_location=table_path_uc,
             schema=converted_schema,
             storage_format=storage_format,
         )
