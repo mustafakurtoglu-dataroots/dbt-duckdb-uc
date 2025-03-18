@@ -268,7 +268,7 @@ class Plugin(BasePlugin):
     def store(self, target_config: TargetConfig, df: pa.lib.Table = None):
         # Assert that the target_config has a location and relation identifier
         assert target_config.location is not None, "Location is required for storing data!"
-        assert target_config.location_uc is not None, "Location is required for storing data!"
+        assert target_config.location_uc is not None, "Location for uc is required for storing data!"
         assert (
             target_config.relation.identifier is not None
         ), "Relation identifier is required to name the table!"
