@@ -297,7 +297,7 @@ class Plugin(BasePlugin):
 
         # Convert the pa schema to columns
         converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
-
+        print(1)
         # Create the table in the Unitycatalog if it does not exist
         create_table_if_not_exists(
             uc_client=self.uc_client,
@@ -308,18 +308,19 @@ class Plugin(BasePlugin):
             schema=converted_schema,
             storage_format=storage_format,
         )
+        print(2)
 
         # extend the storage options with the aws region
         storage_options["AWS_REGION"] = self.aws_region
-
+        print(3)
         # extend the storage options with the temporary table credentials
         storage_options = storage_options | uc_get_storage_credentials(
             self.uc_client, self.catalog_name, schema_name, table_name
         )
-
+        print(4)
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
-
+            print(5)
             delta_write(
                 mode=mode,
                 table_path=table_path,
@@ -329,4 +330,5 @@ class Plugin(BasePlugin):
                 unique_key=unique_key,
             )
         else:
+            print(6)
             raise NotImplementedError(f"Writing storage format {storage_format} not supported!")
