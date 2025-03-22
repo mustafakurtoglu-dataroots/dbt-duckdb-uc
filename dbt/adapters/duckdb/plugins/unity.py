@@ -42,7 +42,7 @@ def uc_table_exists(
         print("test")
         return False
 
-    return table_name in [table.name for table in table_list_request.tables] ,print("ok")
+    return table_name in [table.name for table in table_list_request.tables] ,print(table_name in [table.name for table in table_list_request.tables])
 
 
 def uc_get_storage_credentials(
