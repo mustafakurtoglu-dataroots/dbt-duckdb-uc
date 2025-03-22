@@ -26,6 +26,7 @@ class StorageFormat(str, Enum):
 def uc_schema_exists(client: Unitycatalog, schema_name: str, catalog_name: str = "unity") -> bool:
     """Check if a UC schema exists in the catalog."""
     schema_list_request = client.schemas.list(catalog_name=catalog_name)
+    print("schema_list" , schema_list_request.schemas)
     if not schema_list_request.schemas:
         return False
 
