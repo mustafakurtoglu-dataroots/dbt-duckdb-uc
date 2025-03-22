@@ -194,6 +194,7 @@ def create_table_if_not_exists(
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
 
     if not uc_table_exists(uc_client, table_name, schema_name, catalog_name):
+        print("go")
         uc_client.tables.create(
             catalog_name=catalog_name,
             columns=schema,
@@ -204,6 +205,7 @@ def create_table_if_not_exists(
             storage_location=storage_location,
         )
     else:
+        print("else")
         # TODO: Add support for schema checks/schema evolution with existing schema and dataframe schema
         pass
 
