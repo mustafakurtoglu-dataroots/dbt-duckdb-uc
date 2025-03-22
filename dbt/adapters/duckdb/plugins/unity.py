@@ -314,9 +314,10 @@ class Plugin(BasePlugin):
         storage_options["AWS_REGION"] = self.aws_region
         print(3)
         # extend the storage options with the temporary table credentials
-        storage_options = storage_options | uc_get_storage_credentials(
-            self.uc_client, self.catalog_name, schema_name, table_name
-        )
+        storage_options={}
+     #   storage_options = storage_options | uc_get_storage_credentials(
+     #       self.uc_client, self.catalog_name, schema_name, table_name
+     #   )
         print(4)
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
