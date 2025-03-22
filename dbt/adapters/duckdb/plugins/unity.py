@@ -191,10 +191,11 @@ def create_table_if_not_exists(
     storage_format: UCSupportedFormatLiteral,
 ):
     """Create or update a Unitycatalog table."""
-
+    print("a")
     if not uc_schema_exists(uc_client, schema_name, catalog_name):
+        print("b")
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
-
+    print("c")
     if not uc_table_exists(uc_client, table_name, schema_name, catalog_name):
         print("go")
         uc_client.tables.create(
