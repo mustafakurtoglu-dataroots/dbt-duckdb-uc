@@ -24,10 +24,8 @@ class StorageFormat(str, Enum):
 
 
 def uc_schema_exists(client: Unitycatalog, schema_name: str, catalog_name: str = "unity") -> bool:
-    print("test")
     """Check if a UC schema exists in the catalog."""
     schema_list_request = client.schemas.list(catalog_name=catalog_name)
-    print("schema_list" , schema_list_request.schemas)
     if not schema_list_request.schemas:
         return False
 
@@ -41,10 +39,9 @@ def uc_table_exists(
 
     table_list_request = client.tables.list(catalog_name=catalog_name, schema_name=schema_name)
     if not table_list_request.tables:
-        print("test")
         return False
 
-    return table_name in [table.name for table in table_list_request.tables] ,print(table_name in [table.name for table in table_list_request.tables])
+    return table_name in [table.name for table in table_list_request.tables]
 
 
 def uc_get_storage_credentials(
@@ -191,13 +188,9 @@ def create_table_if_not_exists(
     storage_format: UCSupportedFormatLiteral,
 ):
     """Create or update a Unitycatalog table."""
-    print("a")
     if not uc_schema_exists(uc_client, schema_name, catalog_name):
-        print("b")
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
-    print("c")
     if not uc_table_exists(uc_client, table_name, schema_name, catalog_name):
-        print("go")
         uc_client.tables.create(
             catalog_name=catalog_name,
             columns=schema,
@@ -208,7 +201,6 @@ def create_table_if_not_exists(
             storage_location=storage_location,
         )
     else:
-        print("else")
         # TODO: Add support for schema checks/schema evolution with existing schema and dataframe schema
         pass
 
@@ -300,7 +292,6 @@ class Plugin(BasePlugin):
 
         # Convert the pa schema to columns
         converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
-        print(1)
         # Create the table in the Unitycatalog if it does not exist
         create_table_if_not_exists(
             uc_client=self.uc_client,
@@ -311,20 +302,16 @@ class Plugin(BasePlugin):
             schema=converted_schema,
             storage_format=storage_format,
         )
-        print(2)
 
         # extend the storage options with the aws region
         storage_options["AWS_REGION"] = self.aws_region
-        print(3)
         # extend the storage options with the temporary table credentials
         storage_options={}
      #   storage_options = storage_options | uc_get_storage_credentials(
      #       self.uc_client, self.catalog_name, schema_name, table_name
      #   )
-        print(4)
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
-            print(5)
             delta_write(
                 mode=mode,
                 table_path=table_path,
@@ -334,5 +321,4 @@ class Plugin(BasePlugin):
                 unique_key=unique_key,
             )
         else:
-            print(6)
             raise NotImplementedError(f"Writing storage format {storage_format} not supported!")
