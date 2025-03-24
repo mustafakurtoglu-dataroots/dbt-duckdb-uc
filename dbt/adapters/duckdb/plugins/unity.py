@@ -26,6 +26,7 @@ class StorageFormat(str, Enum):
 def uc_schema_exists(client: Unitycatalog, schema_name: str, catalog_name: str = "unity") -> bool:
     """Check if a UC schema exists in the catalog."""
     schema_list_request = client.schemas.list(catalog_name=catalog_name)
+
     if not schema_list_request.schemas:
         return False
 
@@ -38,6 +39,7 @@ def uc_table_exists(
     """Check if a UC table exists in the catalog."""
 
     table_list_request = client.tables.list(catalog_name=catalog_name, schema_name=schema_name)
+
     if not table_list_request.tables:
         return False
 
@@ -188,8 +190,10 @@ def create_table_if_not_exists(
     storage_format: UCSupportedFormatLiteral,
 ):
     """Create or update a Unitycatalog table."""
+
     if not uc_schema_exists(uc_client, schema_name, catalog_name):
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
+
     if not uc_table_exists(uc_client, table_name, schema_name, catalog_name):
         uc_client.tables.create(
             catalog_name=catalog_name,
@@ -263,9 +267,6 @@ class Plugin(BasePlugin):
 
     def store(self, target_config: TargetConfig, df: pa.lib.Table = None):
         # Assert that the target_config has a location and relation identifier
-     #   print(target_config)
-
-
         assert target_config.location is not None, "Location is required for storing data!"
         assert (
             target_config.relation.identifier is not None
@@ -273,6 +274,7 @@ class Plugin(BasePlugin):
         # Get required variables from the target configuration
         table_path = target_config.location.path
         table_name = target_config.relation.identifier
+
         # Get optional variables from the target configuration
         mode = target_config.config.get("mode", "overwrite")
         schema_name = target_config.config.get("schema")
@@ -292,6 +294,7 @@ class Plugin(BasePlugin):
 
         # Convert the pa schema to columns
         converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
+
         # Create the table in the Unitycatalog if it does not exist
         create_table_if_not_exists(
             uc_client=self.uc_client,
@@ -305,13 +308,15 @@ class Plugin(BasePlugin):
 
         # extend the storage options with the aws region
         storage_options["AWS_REGION"] = self.aws_region
+
         # extend the storage options with the temporary table credentials
-        storage_options={}
-     #   storage_options = storage_options | uc_get_storage_credentials(
-     #       self.uc_client, self.catalog_name, schema_name, table_name
-     #   )
+        storage_options = storage_options | uc_get_storage_credentials(
+            self.uc_client, self.catalog_name, schema_name, table_name
+        )
+
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
+
             delta_write(
                 mode=mode,
                 table_path=table_path,
