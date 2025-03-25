@@ -272,8 +272,8 @@ class Plugin(BasePlugin):
             target_config.relation.identifier is not None
         ), "Relation identifier is required to name the table!"
         # Get required variables from the target configuration
-        table_path = target_config.location.path+table_name
         table_name = target_config.relation.identifier
+        table_path = target_config.location.path+table_name
         print("table_path",table_path)
         print("table_name",table_name)
         # Get optional variables from the target configuration
