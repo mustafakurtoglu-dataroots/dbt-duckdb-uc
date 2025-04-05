@@ -302,21 +302,21 @@ class Plugin(BasePlugin):
             table_name=table_name,
             schema_name=schema_name,
             catalog_name=self.catalog_name,
-            storage_location=f"{target_config.location.path}/{table_name}",
+            storage_location=table_path,
             schema=converted_schema,
             storage_format=storage_format,
         )
-        print("storage_options1",storage_options)
+        #print("storage_options1",storage_options)
 
         # extend the storage options with the aws region
         storage_options["AWS_REGION"] = self.aws_region
         is_adls_path = table_path.startswith("abfss://")
-        print("storage_options2",storage_options)
+        #print("storage_options2",storage_options)
         # extend the storage options with the temporary table credentials
         storage_options = storage_options | uc_get_storage_credentials(
             self.uc_client, self.catalog_name, schema_name, table_name
         )
-        print("storage_options3",storage_options)
+        #print("storage_options3",storage_options)
         if is_adls_path:
             # --- ADLS Path ---
             try:
@@ -327,7 +327,7 @@ class Plugin(BasePlugin):
                     "azure_client_secret": os.environ['AZURE_CLIENT_SECRET'],
                     "use_azure_cli": "false",
                 }
-                print("adls_storage_options:",adls_storage_options)
+                #print("adls_storage_options:",adls_storage_options)
                 storage_options=adls_storage_options
             except KeyError as e:
                 raise Exception(f"Azure credential environment variable not set: {e}")
