@@ -7,6 +7,7 @@ from typing import Dict
 from typing import Literal
 
 import pyarrow as pa
+import os
 from unitycatalog import Unitycatalog
 from unitycatalog.types import GenerateTemporaryTableCredentialResponse
 from unitycatalog.types.table_create_params import Column
@@ -305,14 +306,33 @@ class Plugin(BasePlugin):
             schema=converted_schema,
             storage_format=storage_format,
         )
+        print("storage_options1",storage_options)
 
         # extend the storage options with the aws region
         storage_options["AWS_REGION"] = self.aws_region
-
+        is_adls_path = table_path.startswith("abfss://")
+        print("storage_options2",storage_options)
         # extend the storage options with the temporary table credentials
         storage_options = storage_options | uc_get_storage_credentials(
             self.uc_client, self.catalog_name, schema_name, table_name
         )
+        print("storage_options3",storage_options)
+        if is_adls_path:
+            # --- ADLS Path ---
+            try:
+                adls_storage_options = {
+                    "azure_storage_account_name": os.environ.get('AZURE_STORAGE_ACCOUNT'),
+                    "azure_tenant_id": os.environ['AZURE_TENANT_ID'],
+                    "azure_client_id": os.environ['AZURE_CLIENT_ID'],
+                    "azure_client_secret": os.environ['AZURE_CLIENT_SECRET'],
+                    "use_azure_cli": "false",
+                }
+                print("adls_storage_options:",adls_storage_options)
+                storage_options=adls_storage_options
+            except KeyError as e:
+                raise Exception(f"Azure credential environment variable not set: {e}")
+                
+
 
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
