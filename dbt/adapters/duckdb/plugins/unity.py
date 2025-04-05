@@ -306,17 +306,17 @@ class Plugin(BasePlugin):
             schema=converted_schema,
             storage_format=storage_format,
         )
-        #print("storage_options1",storage_options)
+        print("storage_options1",storage_options)
 
         # extend the storage options with the aws region
         storage_options["AWS_REGION"] = self.aws_region
         is_adls_path = table_path.startswith("abfss://")
-        #print("storage_options2",storage_options)
+        print("storage_options2",storage_options)
         # extend the storage options with the temporary table credentials
-        storage_options = storage_options | uc_get_storage_credentials(
-            self.uc_client, self.catalog_name, schema_name, table_name
-        )
-        #print("storage_options3",storage_options)
+        #storage_options = storage_options | uc_get_storage_credentials(
+        #    self.uc_client, self.catalog_name, schema_name, table_name
+        #)
+        print("storage_options3",storage_options)
         if is_adls_path:
             # --- ADLS Path ---
             try:
