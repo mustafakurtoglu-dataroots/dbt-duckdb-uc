@@ -302,7 +302,7 @@ class Plugin(BasePlugin):
             table_name=table_name,
             schema_name=schema_name,
             catalog_name=self.catalog_name,
-            storage_location=table_path,
+            storage_location=f"{target_config.location.path}/{table_name}",
             schema=converted_schema,
             storage_format=storage_format,
         )
