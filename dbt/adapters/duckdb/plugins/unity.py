@@ -67,12 +67,12 @@ def uc_get_storage_credentials(
         operation="READ_WRITE", table_id=table_response.table_id
     )
 
-    if creds.aws_temp_credentials:
-        return {
-            "AWS_ACCESS_KEY_ID": creds.aws_temp_credentials.access_key_id,
-            "AWS_SECRET_ACCESS_KEY": creds.aws_temp_credentials.secret_access_key,
-            "AWS_SESSION_TOKEN": creds.aws_temp_credentials.session_token,
-        }
+#    if creds.aws_temp_credentials:
+ #       return {
+  #          "AWS_ACCESS_KEY_ID": creds.aws_temp_credentials.access_key_id,
+   #         "AWS_SECRET_ACCESS_KEY": creds.aws_temp_credentials.secret_access_key,
+    #        "AWS_SESSION_TOKEN": creds.aws_temp_credentials.session_token,
+     #   }
 
     return {}
 
@@ -241,7 +241,7 @@ class Plugin(BasePlugin):
         uc_secret = find_secrets_by_type(self.creds.secrets, "UC")
 
         # Get AWS region from the UC secret
-        self.aws_region = uc_secret["aws_region"]
+       # self.aws_region = uc_secret["aws_region"]
 
         # Get the endpoint from the UC secret
         host_and_port = uc_secret["endpoint"]
@@ -306,12 +306,12 @@ class Plugin(BasePlugin):
             schema=converted_schema,
             storage_format=storage_format,
         )
-        print("storage_options1",storage_options)
+        #print("storage_options1",storage_options)
 
         # extend the storage options with the aws region
-        storage_options["AWS_REGION"] = self.aws_region
+        #storage_options["AWS_REGION"] = self.aws_region
         is_adls_path = table_path.startswith("abfss://")
-        print("storage_options2",storage_options)
+       # print("storage_options2",storage_options)
         # extend the storage options with the temporary table credentials
       #  storage_options = storage_options | uc_get_storage_credentials(
        #     self.uc_client, self.catalog_name, schema_name, table_name
