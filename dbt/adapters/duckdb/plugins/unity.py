@@ -24,6 +24,15 @@ class StorageFormat(str, Enum):
     DELTA = "DELTA"
 
 
+def uc_catalog_exists(client: Unitycatalog, catalog_name: str = "unity") -> bool:
+    """Check if a UC catalog exists in the catalog."""
+    catalog_list_request = client.catalogs.list()
+
+    if not catalog_list_request.catalogs:
+        return False
+
+    return catalog_name in [catalog.name for catalog in catalog_list_request.catalogs]
+    
 def uc_schema_exists(client: Unitycatalog, schema_name: str, catalog_name: str = "unity") -> bool:
     """Check if a UC schema exists in the catalog."""
     schema_list_request = client.schemas.list(catalog_name=catalog_name)
@@ -192,6 +201,9 @@ def create_table_if_not_exists(
 ):
     """Create or update a Unitycatalog table."""
 
+    if not uc_catalog_exists(uc_client, catalog_name):
+        uc_client.catalogs.create(name=catalog_name)
+
     if not uc_schema_exists(uc_client, schema_name, catalog_name):
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
 
@@ -279,6 +291,11 @@ class Plugin(BasePlugin):
         # Get optional variables from the target configuration
         mode = target_config.config.get("mode", "overwrite")
         schema_name = target_config.config.get("schema")
+        catalog_name = target_config.config.get("schema")
+
+        # If catalog_name is not provided or empty set to unity"
+        if not catalog_name or catalog_name == "":
+            catalog_name = "unity"
 
         # If schema is not provided or empty set to default"
         if not schema_name or schema_name == "":
@@ -301,7 +318,7 @@ class Plugin(BasePlugin):
             uc_client=self.uc_client,
             table_name=table_name,
             schema_name=schema_name,
-            catalog_name=self.catalog_name,
+            catalog_name=catalog_name,
             storage_location=table_path,
             schema=converted_schema,
             storage_format=storage_format,
