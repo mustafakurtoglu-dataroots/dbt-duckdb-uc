@@ -292,7 +292,7 @@ class Plugin(BasePlugin):
         # Get optional variables from the target configuration
         mode = target_config.config.get("mode", "overwrite")
         schema_name = target_config.config.get("schema")
-        catalog_name = target_config.config.get("schema")
+        catalog_name = target_config.config.get("catalog")
 
         # If catalog_name is not provided or empty set to unity"
         if not catalog_name or catalog_name == "":
