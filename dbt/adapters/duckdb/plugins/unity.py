@@ -287,11 +287,13 @@ class Plugin(BasePlugin):
         # Get required variables from the target configuration
         table_name = target_config.relation.identifier
 
-        table_path=f"{target_config.location.path}/{table_name}"
+        #table_path=f"{target_config.location.path}/{table_name}"
+        # Construct the structured path
         # Get optional variables from the target configuration
         mode = target_config.config.get("mode", "overwrite")
         schema_name = target_config.config.get("schema")
         catalog_name = target_config.config.get("schema")
+        table_path = f"{target_config.location.path}/{catalog_name}/{schema_name}/{table_name}"
 
         # If catalog_name is not provided or empty set to unity"
         if not catalog_name or catalog_name == "":
