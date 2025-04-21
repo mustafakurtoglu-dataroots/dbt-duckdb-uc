@@ -334,20 +334,20 @@ class Plugin(BasePlugin):
        #     self.uc_client, self.catalog_name, schema_name, table_name
         #)
         print("storage_options3",storage_options)
-        if is_adls_path:
-            # --- ADLS Path ---
-            try:
-                adls_storage_options = {
-                    "azure_storage_account_name": os.environ.get('AZURE_STORAGE_ACCOUNT'),
-                    "azure_tenant_id": os.environ['AZURE_TENANT_ID'],
-                    "azure_client_id": os.environ['AZURE_CLIENT_ID'],
-                    "azure_client_secret": os.environ['AZURE_CLIENT_SECRET'],
-                    "use_azure_cli": "false",
-                }
-                #print("adls_storage_options:",adls_storage_options)
-                storage_options=adls_storage_options
-            except KeyError as e:
-                raise Exception(f"Azure credential environment variable not set: {e}")
+     #   if is_adls_path:
+     #       # --- ADLS Path ---
+     #       try:
+     #           adls_storage_options = {
+     #               "azure_storage_account_name": os.environ.get('AZURE_STORAGE_ACCOUNT'),
+     #               "azure_tenant_id": os.environ['AZURE_TENANT_ID'],
+     #               "azure_client_id": os.environ['AZURE_CLIENT_ID'],
+     #               "azure_client_secret": os.environ['AZURE_CLIENT_SECRET'],
+     #               "use_azure_cli": "false",
+     #           }
+     #           #print("adls_storage_options:",adls_storage_options)
+     #           storage_options=adls_storage_options
+     #       except KeyError as e:
+     #           raise Exception(f"Azure credential environment variable not set: {e}")
                 
 
 
