@@ -26,7 +26,6 @@ class StorageFormat(str, Enum):
 
 def uc_catalog_exists(client: Unitycatalog, catalog_name: str = "unity") -> bool:
     """Check if a UC catalog exists in the catalog."""
-    print(catalog_name)
     catalog_list_request = client.catalogs.list()
 
     if not catalog_list_request.catalogs:
@@ -36,7 +35,6 @@ def uc_catalog_exists(client: Unitycatalog, catalog_name: str = "unity") -> bool
     
 def uc_schema_exists(client: Unitycatalog, schema_name: str, catalog_name: str = "unity") -> bool:
     """Check if a UC schema exists in the catalog."""
-    print(catalog_name)
     schema_list_request = client.schemas.list(catalog_name=catalog_name)
 
     if not schema_list_request.schemas:
@@ -49,7 +47,6 @@ def uc_table_exists(
     client: Unitycatalog, table_name: str, schema_name: str, catalog_name: str = "unity"
 ) -> bool:
     """Check if a UC table exists in the catalog."""
-    print(catalog_name)
     table_list_request = client.tables.list(catalog_name=catalog_name, schema_name=schema_name)
 
     if not table_list_request.tables:
