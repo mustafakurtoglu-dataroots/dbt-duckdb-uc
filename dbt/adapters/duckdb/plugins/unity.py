@@ -200,12 +200,14 @@ def create_table_if_not_exists(
 ):
     """Create or update a Unitycatalog table."""
 
+    print("trying uc_catalog_exists")
     if not uc_catalog_exists(uc_client, catalog_name):
         uc_client.catalogs.create(name=catalog_name)
-
+    print("trying uc_schema_exists")
     if not uc_schema_exists(uc_client, schema_name, catalog_name):
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
 
+    print("trying uc_table_exists")
     if not uc_table_exists(uc_client, table_name, schema_name, catalog_name):
         uc_client.tables.create(
             catalog_name=catalog_name,
@@ -314,6 +316,7 @@ class Plugin(BasePlugin):
         converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
 
         # Create the table in the Unitycatalog if it does not exist
+        print("trying create_table_if_not_exists")
         create_table_if_not_exists(
             uc_client=self.uc_client,
             table_name=table_name,
@@ -353,7 +356,7 @@ class Plugin(BasePlugin):
 
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
-
+            print("trying delta_write")
             delta_write(
                 mode=mode,
                 table_path=table_path,
