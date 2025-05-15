@@ -316,6 +316,7 @@ class Plugin(BasePlugin):
         converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
 
         # Create the table in the Unitycatalog if it does not exist
+        print(f"catalog_name : {catalog_name}")
         print("trying create_table_if_not_exists")
         create_table_if_not_exists(
             uc_client=self.uc_client,
