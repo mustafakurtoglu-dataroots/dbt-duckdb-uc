@@ -200,14 +200,14 @@ def create_table_if_not_exists(
 ):
     """Create or update a Unitycatalog table."""
 
-    print("trying uc_catalog_exists")
+#    print("trying uc_catalog_exists")
     if not uc_catalog_exists(uc_client, catalog_name):
         uc_client.catalogs.create(name=catalog_name)
-    print("trying uc_schema_exists")
+ #   print("trying uc_schema_exists")
     if not uc_schema_exists(uc_client, schema_name, catalog_name):
         uc_client.schemas.create(catalog_name=catalog_name, name=schema_name)
 
-    print("trying uc_table_exists")
+  #  print("trying uc_table_exists")
     if not uc_table_exists(uc_client, table_name, schema_name, catalog_name):
         uc_client.tables.create(
             catalog_name=catalog_name,
@@ -267,7 +267,7 @@ class Plugin(BasePlugin):
 
         # Construct the full base URL
         catalog_base_url = f"{host_and_port}/{api_base_path}"
-        print(catalog_base_url)
+   #     print(catalog_base_url)
 
         # Prism mocks the UC server to http://127.0.0.1:4010 with no option to specify a basePath (api/2.1/unity-catalog)
         # https://github.com/stoplightio/prism/discussions/906
@@ -304,7 +304,7 @@ class Plugin(BasePlugin):
         if not schema_name or schema_name == "":
             schema_name = "default"
         table_path = f"{target_config.location.path}/{catalog_name}/{schema_name}/{table_name}"
-        print(table_path)
+    #    print(table_path)
         storage_options = target_config.config.get("storage_options", {})
         partition_key = target_config.config.get("partition_key", None)
         unique_key = target_config.config.get("unique_key", None)
@@ -318,8 +318,8 @@ class Plugin(BasePlugin):
         converted_schema = pyarrow_schema_to_columns(schema=df_converted.schema)
 
         # Create the table in the Unitycatalog if it does not exist
-        print(f"catalog_name : {catalog_name}")
-        print("trying create_table_if_not_exists")
+   #     print(f"catalog_name : {catalog_name}")
+   #     print("trying create_table_if_not_exists")
         create_table_if_not_exists(
             uc_client=self.uc_client,
             table_name=table_name,
@@ -359,7 +359,7 @@ class Plugin(BasePlugin):
 
         if storage_format == StorageFormat.DELTA:
             from .delta import delta_write
-            print("trying delta_write")
+        #    print("trying delta_write")
             delta_write(
                 mode=mode,
                 table_path=table_path,
