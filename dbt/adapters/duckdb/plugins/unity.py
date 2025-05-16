@@ -267,6 +267,7 @@ class Plugin(BasePlugin):
 
         # Construct the full base URL
         catalog_base_url = f"{host_and_port}/{api_base_path}"
+        print(catalog_base_url)
 
         # Prism mocks the UC server to http://127.0.0.1:4010 with no option to specify a basePath (api/2.1/unity-catalog)
         # https://github.com/stoplightio/prism/discussions/906
