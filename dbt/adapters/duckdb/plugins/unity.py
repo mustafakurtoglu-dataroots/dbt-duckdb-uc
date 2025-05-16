@@ -303,6 +303,7 @@ class Plugin(BasePlugin):
         if not schema_name or schema_name == "":
             schema_name = "default"
         table_path = f"{target_config.location.path}/{catalog_name}/{schema_name}/{table_name}"
+        print(table_path)
         storage_options = target_config.config.get("storage_options", {})
         partition_key = target_config.config.get("partition_key", None)
         unique_key = target_config.config.get("unique_key", None)
